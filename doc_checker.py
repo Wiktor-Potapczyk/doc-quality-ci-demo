@@ -3,6 +3,7 @@ import sys
 import re
 from bs4 import BeautifulSoup
 from datetime import datetime
+import html # Added for escaping
 
 def check_html_file(filepath):
     """
@@ -88,7 +89,7 @@ def generate_report(results):
     """
     Generates an HTML report from the results dictionary.
     """
-    html = f"""
+    report_html = f"""
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -115,18 +116,21 @@ def generate_report(results):
     """
     
     for filepath, issues in results.items():
-        html += f'<div class="file-block"><div class="file-name">{filepath}</div>'
+        report_html += f'<div class="file-block"><div class="file-name">{filepath}</div>'
         
         if not issues:
-            html += '<div class="no-issues">✓ No issues found.</div>'
+            report_html += '<div class="no-issues">✓ No issues found.</div>'
         else:
             for issue in issues:
-                html += f'<div class="issue {issue["severity"]}"><strong>[{issue["severity"]}] {issue["type"]}:</strong> {issue["message"]}</div>'
+                # Debug print
+                # print(f"DEBUG: Processing issue: {issue}")
+                safe_message = html.escape(str(issue["message"]))
+                report_html += f'<div class="issue {issue["severity"]}"><strong>[{issue["severity"]}] {issue["type"]}:</strong> {safe_message}</div>'
         
-        html += '</div>'
+        report_html += '</div>'
 
-    html += "</body></html>"
-    return html
+    report_html += "</body></html>"
+    return report_html
 
 def main():
     if len(sys.argv) < 2:
