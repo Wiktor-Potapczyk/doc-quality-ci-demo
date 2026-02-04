@@ -3,34 +3,23 @@
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>DocOps Validaton Report</title>
+        <title>Doc Quality Report</title>
         <style>
-            body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
-            .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-            h1 { border-bottom: 2px solid #00d084; padding-bottom: 10px; color: #333; }
-            .summary { margin-bottom: 20px; }
-            .status { font-weight: bold; padding: 5px 10px; border-radius: 4px; color: white; }
-            .status.pass { background-color: #00d084; }
-            .status.fail { background-color: #ff4d4d; }
-            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-            th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-            th { background-color: #f8f8f8; }
-            tr:nth-child(even) { background-color: #f9f9f9; }
-            .type-badge { font-size: 0.8em; background: #eee; padding: 2px 6px; border-radius: 4px; }
+            body { font-family: sans-serif; margin: 2rem; background: #f8fafc; color: #334155; }
+            h1 { color: #0f172a; }
+            .file-block { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+            .file-name { font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+            .issue { padding: 0.75rem; border-left: 4px solid #ccc; background: #f1f5f9; margin-bottom: 0.5rem; }
+            .issue.Error { border-left-color: #ef4444; background: #fee2e2; }
+            .issue.Warning { border-left-color: #f59e0b; background: #fef3c7; }
+            .timestamp { color: #64748b; font-size: 0.9rem; }
+            .no-issues { color: #22c55e; font-weight: bold; }
+            .summary { margin-bottom: 2rem; }
         </style>
     </head>
     <body>
-        <div class="container">
-            <h1>Validation Report</h1>
-            <div class="summary">
-                <p><strong>File Checked:</strong> doc_checker/mock_help_center.html</p>
-                <p><strong>Date:</strong> 2026-02-04 15:45:29</p>
-                <p><strong>Status:</strong> <span class="status fail">FAILED</span></p>
-                <p><strong>Issues Found:</strong> 7</p>
-            </div>
-            
-            <table><thead><tr><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><span class='type-badge'>Build Leftover</span></td><td>Found "TBD" placeholder: 'TBD'</td></tr><tr><td><span class='type-badge'>Build Leftover</span></td><td>Found "TBD" placeholder: 'TBD'</td></tr><tr><td><span class='type-badge'>Build Leftover</span></td><td>Found "<%...%>" placeholder tag: '<% specs_link %>'</td></tr><tr><td><span class='type-badge'>Structure</span></td><td>Found 2 <h1> tags. Should be exactly 1.</td></tr><tr><td><span class='type-badge'>Structure</span></td><td>Skipped heading level: <h1> to <h3> ("Installation (Intent...")</td></tr><tr><td><span class='type-badge'>SEO/Meta</span></td><td>Missing meta tag: "description"</td></tr><tr><td><span class='type-badge'>SEO/Meta</span></td><td>Missing meta tag: "keywords"</td></tr></tbody></table>
+        <h1>Documentation Quality Report</h1>
+        <div class="summary">
+            <p class="timestamp">Generated: 2026-02-04 18:41:53</p>
         </div>
-    </body>
-    </html>
-    
+    <div class="file-block"><div class="file-name">test_files/good.html</div><div class="no-issues">✓ No issues found.</div></div><div class="file-block"><div class="file-name">test_files/bad.html</div><div class="issue Error"><strong>[Error] Placeholder:</strong> Found 'TBD' text: "This section contains a TBD marker...."</div><div class="issue Error"><strong>[Error] Placeholder:</strong> Found placeholder pattern: <% variable_name %></div><div class="issue Warning"><strong>[Warning] Structure:</strong> Skipped heading level: <h2> followed by <h4> ('Subsection (Skipped H3)')</div><div class="issue Error"><strong>[Error] Structure:</strong> Missing <h1> tag.</div><div class="issue Error"><strong>[Error] Post-publish Validation:</strong> Missing or empty 'description' meta tag.</div><div class="issue Warning"><strong>[Warning] Post-publish Validation:</strong> Missing or empty 'keywords' meta tag.</div></div></body></html>

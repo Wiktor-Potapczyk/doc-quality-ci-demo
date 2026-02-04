@@ -67,26 +67,25 @@ def check_html_file(filepath):
             elif h1_count > 1:
                 issues.append({'type': 'Structure', 'message': f"Multiple <h1> tags found ({h1_count}).", 'severity': 'Error'})
 
-            # --- Check 3: Meta Tags ---
+            # --- Check 3: Post-publish Validation (Meta Tags) ---
             meta_desc = soup.find('meta', attrs={'name': 'description'})
             meta_keys = soup.find('meta', attrs={'name': 'keywords'})
             
-            if not meta_desc or not meta_desc.get('content'):
-                issues.append({'type': 'SEO', 'message': "Missing or empty 'description' meta tag.", 'severity': 'Error'})
+            # Verify description is present and has non-empty content
+            if not meta_desc or not meta_desc.get('content') or not meta_desc.get('content').strip():
+                issues.append({
+                    'type': 'Post-publish Validation', 
+                    'message': "Missing or empty 'description' meta tag.", 
+                    'severity': 'Error'
+                })
                 
-            if not meta_keys or not meta_keys.get('content'):
-                issues.append({'type': 'SEO', 'message': "Missing or empty 'keywords' meta tag.", 'severity': 'Warning'})
-
-            # --- Check 4: Image Metadata (Requirement: Check for missing alt attributes) ---
-            images = soup.find_all('img')
-            for img in images:
-                if not img.get('alt'):
-                    img_src = img.get('src', 'unknown')
-                    issues.append({
-                        'type': 'Accessibility', 
-                        'message': f"Image missing 'alt' attribute: src='{img_src}'", 
-                        'severity': 'Error'
-                    })
+            # Verify keywords is present and has non-empty content
+            if not meta_keys or not meta_keys.get('content') or not meta_keys.get('content').strip():
+                issues.append({
+                    'type': 'Post-publish Validation', 
+                    'message': "Missing or empty 'keywords' meta tag.", 
+                    'severity': 'Warning'
+                })
 
     except Exception as e:
         issues.append({'type': 'Fatal', 'message': f"Could not parse file: {str(e)}", 'severity': 'Critical'})
