@@ -59,7 +59,7 @@ The tool checks for three specific categories of issues:
 ### Status Colors
 *   <span style="color:green">**Green (No issues found)**</span>: The file passed all checks.
 *   <span style="color:orange">**Yellow (Warning)**</span>: Minor issues found (e.g., non-critical tagging).
-*   <span style="color:red">**Red (Error)**</span>: Critical issues found (e.g., missing title, placeholders in production text).
+*   <span style="color:red">**Red (Error)**</span>: Critical issues found. The report includes line numbers for location tracking (e.g., `[Line 45]`).
 
 ## 6. Troubleshooting
 

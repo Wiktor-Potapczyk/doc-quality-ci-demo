@@ -25,19 +25,21 @@ def check_html_file(filepath):
             for node in text_nodes:
                 # Basic context extract
                 context = node.strip()[:50]
+                line_val = getattr(node, 'sourceline', None)
+                line_str = f"[Line {line_val}] " if line_val else ""
                 issues.append({
                     'type': 'Placeholder',
-                    'message': f"Found 'TBD' text: \"{context}...\"",
+                    'message': f"{line_str}Found 'TBD' text: \"{context}...\"",
                     'severity': 'Error'
                 })
             
             # Regex for <% %> style placeholders in raw content
             # (BeautifulSoup might hide these if they look like tags, so check raw string)
-            placeholders = re.findall(r'<%.*?%>', content)
-            for p in placeholders:
+            for match in re.finditer(r'<%.*?%>', content):
+                line_num = content.count('\n', 0, match.start()) + 1
                 issues.append({
                     'type': 'Placeholder',
-                    'message': f"Found placeholder pattern: {p}",
+                    'message': f"[Line {line_num}] Found placeholder pattern: {match.group(0)}",
                     'severity': 'Error'
                 })
 
@@ -49,6 +51,8 @@ def check_html_file(filepath):
             for tag in headings:
                 level = int(tag.name[1])
                 text = tag.get_text(strip=True)
+                line_val = getattr(tag, 'sourceline', None)
+                line_str = f"[Line {line_val}] " if line_val else ""
                 
                 if level == 1:
                     h1_count += 1
@@ -57,7 +61,7 @@ def check_html_file(filepath):
                 if last_level > 0 and level > last_level + 1:
                     issues.append({
                         'type': 'Structure',
-                        'message': f"Skipped heading level: <h{last_level}> followed by <h{level}> ('{text}')",
+                        'message': f"{line_str}Skipped heading level: <h{last_level}> followed by <h{level}> ('{text}')",
                         'severity': 'Warning'
                     })
                 
@@ -74,9 +78,14 @@ def check_html_file(filepath):
             
             # Verify description is present and has non-empty content
             if not meta_desc or not meta_desc.get('content') or not meta_desc.get('content').strip():
+                line_info = ""
+                line_val = getattr(meta_desc, 'sourceline', None) if meta_desc else None
+                if line_val:
+                    line_info = f"[Line {line_val}] "
+                
                 issues.append({
                     'type': 'Post-publish Validation', 
-                    'message': "Missing or empty 'description' meta tag.", 
+                    'message': f"{line_info}Missing or empty 'description' meta tag.", 
                     'severity': 'Error'
                 })
 
