@@ -1,52 +1,26 @@
-# Documentation Quality Checker
+# DocOps Quality Task - CI/CD Demo
 
-A Python-based CLI tool designed to audit HTML documentation files for structural integrity, content verification, and metadata quality.
+This repository is a **demonstration extension** of the Documentation Quality Task. It showcases how the quality check script (`doc_checker.py`) can be integrated into a Continuous Integration (CI) pipeline using **GitHub Actions**.
 
-## Documentation
-See [User Guide](doc_checker_user_guide.md) for detailed usage instructions (including **Docker** setup).
+## 🚀 How to see it in action
 
-## Features
+1.  **View the Pipeline:** Click on the **[Actions](https://github.com/Wiktor-Potapczyk/doc-quality-ci-demo/actions)** tab in this repository.
+2.  **Check the Logs:** Click on the latest workflow run to see the step-by-step execution:
+    *   Environment setup (Ubuntu + Python 3.9)
+    *   Dependency installation (`beautifulsoup4`, `lxml`)
+    *   **Automatic execution** of `doc_checker.py` against the test files.
 
-This tool implements **3 specific quality checks** found in common technical writing standards:
+## 🛠 What does the pipeline do?
 
-1.  **HTML Structure**:
-    *   Verifies that exactly one `<h1>` tag exists.
-    *   Ensures heading levels are sequential (e.g., `<h2>` must follow `<h1>`, not jump to `<h4>`).
-2.  **Build Leftovers**:
-    *   Detects "TBD" (To Be Determined) text.
-    *   Detects raw template placeholders like `<% variable %>`.
-3.  **Post-publish Validation (Meta Tags)**:
-    *   Verifies that the `description` meta tag is present and contains non-empty text.
+The configuration is defined in `.github/workflows/quality-check.yml`. Every time code is pushed to the repository, it automatically:
 
-## Prerequisites
+1.  **Spins up a clean container** (Ubuntu latest).
+2.  **Installs dependencies** ensuring the environment is reproducible.
+3.  **Runs the Quality Checker** script against the documentation.
+4.  **Reports Status:**
+    *   ✅ **Success:** If the documentation passes all checks.
+    *   ❌ **Failure:** If the script detects errors (e.g., missing meta tags, broken structure), the pipeline fails, preventing bad documentation from being merged.
 
-- Python 3.x installed.
-- **Dependencies**: Install the required library using pip:
-  ```bash
-  pip install beautifulsoup4
-  ```
+## 📂 Original Solution
 
-## Usage
-
-Run the script from the command line, providing the path(s) to the HTML file(s) you want to check.
-
-### Basic Command
-```bash
-python doc_checker.py "path/to/your/file.html"
-```
-
-### Checking Multiple Files
-```bash
-python doc_checker.py file1.html file2.html file3.html
-```
-
-## Output
-
-The tool generates a single **HTML Report** in the current directory:
-- **File**: `report.html`
-- **Content**: A color-coded summary of passes (Green) and failures (Red/Yellow) for each checked file.
-
-## Troubleshooting
-
-- **"File not found"**: Ensure you provide the correct absolute or relative path to the HTML file.
-- **"ModuleNotFoundError"**: Run `pip install beautifulsoup4`.
+For the standard solution code without the CI/CD layer, please see the [main repository](https://github.com/Wiktor-Potapczyk/doc-quality-checker).
