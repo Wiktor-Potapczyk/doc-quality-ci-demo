@@ -21,5 +21,12 @@ jobs:
 
     - name: Run Quality Checks
       run: |
-        # Run the checker against the modified test file included in the repo
+        # Run the checker against the modified test file
         python doc_checker.py "test_files/modified_veeam_test.html"
+
+    - name: Upload Quality Report
+      if: always()  # Run this step even if the previous step fails (finds errors)
+      uses: actions/upload-artifact@v4
+      with:
+        name: quality-report
+        path: report.html
