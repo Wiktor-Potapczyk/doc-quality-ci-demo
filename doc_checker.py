@@ -78,14 +78,6 @@ def check_html_file(filepath):
                     'message': "Missing or empty 'description' meta tag.", 
                     'severity': 'Error'
                 })
-                
-            # Verify keywords is present and has non-empty content
-            if not meta_keys or not meta_keys.get('content') or not meta_keys.get('content').strip():
-                issues.append({
-                    'type': 'Post-publish Validation', 
-                    'message': "Missing or empty 'keywords' meta tag.", 
-                    'severity': 'Warning'
-                })
 
     except Exception as e:
         issues.append({'type': 'Fatal', 'message': f"Could not parse file: {str(e)}", 'severity': 'Critical'})
